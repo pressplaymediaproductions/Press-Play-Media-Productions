@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Press Play Media Productions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg:#080c10;--surface:#101520;--surface2:#181f2c;--accent:#e8ff47;--accent2:#00c9ff;
+  --text:#f0f4ff;--muted:#5a6480;--border:rgba(232,255,71,0.12);
+  --free-bg:#0d2010;--free-txt:#4ecb71;--prem-bg:#1a1408;--prem-txt:#e8ff47;
+  --red:#c04040;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:0.5px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.08em;color:var(--accent);}
+.logo span{color:var(--accent2);}
+.nav-tabs{display:flex;gap:4px;}
+.nav-tab{padding:6px 14px;border-radius:18px;font-size:13px;font-weight:500;cursor:pointer;border:0.5px solid transparent;color:var(--muted);background:transparent;transition:all 0.18s;}
+.nav-tab.active{background:var(--accent);color:#080c10;border-color:var(--accent);}
+.nav-tab:hover:not(.active){color:var(--text);border-color:var(--border);}
+
+/* PAGES */
+.page{display:none;animation:fadeUp 0.28s ease;max-width:900px;margin:0 auto;}
+.page.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#0d1520 0%,#080c10 70%);padding:36px 24px 28px;border-bottom:0.5px solid var(--border);position:relative;overflow:hidden;}
+.hero::before{content:'▶';position:absolute;right:-20px;top:-20px;font-size:200px;color:rgba(232,255,71,0.03);pointer-events:none;}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(232,255,71,0.08);border:0.5px solid var(--border);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--accent);margin-bottom:14px;letter-spacing:0.06em;}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:0.06em;line-height:1.05;margin-bottom:8px;}
+.hero h1 span{color:var(--accent);}
+.hero p{font-size:14px;color:var(--muted);max-width:400px;line-height:1.6;}
+.hero-btns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+.btn-primary{padding:10px 24px;background:var(--accent);color:#080c10;border:none;border-radius:24px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity 0.18s;}
+.btn-primary:hover{opacity:0.85;}
+.btn-secondary{padding:10px 24px;background:transparent;color:var(--accent2);border:0.5px solid var(--accent2);border-radius:24px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+/* FAN TABS */
+.fan-tabs{display:flex;gap:0;border-bottom:0.5px solid var(--border);overflow-x:auto;padding:0 4px;}
+.fan-tab{padding:11px 16px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.18s;}
+.fan-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.fan-section{display:none;padding-bottom:20px;}
+.fan-section.active{display:block;}
+
+/* SECTION LABEL */
+.sec-label{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;padding:16px 20px 10px;}
+
+/* CONTENT CARDS */
+.content-list{padding:0 18px 14px;display:flex;flex-direction:column;gap:10px;}
+.content-card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color 0.18s;}
+.content-card:hover{border-color:rgba(232,255,71,0.35);}
+.cthumb{width:52px;height:52px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.tm{background:#0d1a08;}.tv{background:#080d1a;}.tp{background:#1a080d;}
+.cinfo{flex:1;min-width:0;}
+.ctitle{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cmeta{font-size:12px;color:var(--muted);}
+.badge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;flex-shrink:0;letter-spacing:0.04em;}
+.bf{background:var(--free-bg);color:var(--free-txt);}
+.bp{background:var(--prem-bg);color:var(--prem-txt);}
+.locked{position:relative;overflow:hidden;}
+.locked::after{content:'🔒 Members only — Go Premium';position:absolute;inset:0;background:rgba(8,12,16,0.82);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--accent);border-radius:12px;cursor:pointer;}
+
+/* VIDEO PLAYER */
+.video-player{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;margin:0 18px 12px;overflow:hidden;}
+.video-screen{background:#000;height:200px;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;}
+.video-screen-inner{text-align:center;}
+.play-btn-big{width:60px;height:60px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 8px;cursor:pointer;transition:transform 0.18s;}
+.play-btn-big:hover{transform:scale(1.08);}
+.video-title-overlay{font-size:13px;color:var(--muted);}
+.video-controls{padding:12px 16px;display:flex;align-items:center;gap:12px;}
+.vc-btn{background:transparent;border:none;color:var(--accent);font-size:18px;cursor:pointer;padding:0;}
+.progress-bar{flex:1;height:4px;background:var(--surface2);border-radius:2px;cursor:pointer;position:relative;}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width 0.5s linear;}
+.vc-time{font-size:11px;color:var(--muted);min-width:40px;text-align:right;}
+.video-info{padding:0 16px 14px;}
+.video-info h3{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px;}
+.video-info p{font-size:12px;color:var(--muted);}
+
+/* ANNOUNCEMENTS */
+.ann-list{padding:0 18px 14px;display:flex;flex-direction:column;gap:10px;}
+.ann-card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:16px;}
+.ann-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.ann-tag{font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;background:rgba(0,201,255,0.1);color:var(--accent2);letter-spacing:0.05em;}
+.ann-date{font-size:11px;color:var(--muted);}
+.ann-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:6px;}
+.ann-body{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* MERCH */
+.merch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 18px 18px;}
+.merch-card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color 0.18s;}
+.merch-card:hover{border-color:rgba(232,255,71,0.35);}
+.merch-img{height:100px;display:flex;align-items:center;justify-content:center;font-size:42px;background:var(--surface2);}
+.merch-info{padding:12px;}
+.merch-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px;}
+.merch-price{font-size:13px;color:var(--accent);font-weight:500;}
+.merch-desc{font-size:11px;color:var(--muted);margin-top:3px;}
+.merch-buy{display:block;width:100%;margin-top:10px;padding:8px;background:var(--accent);color:#080c10;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity 0.18s;}
+.merch-buy:hover{opacity:0.85;}
+
+/* COMMENTS */
+.comments-section{padding:0 18px 20px;}
+.comments-header{font-size:13px;font-weight:500;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.comment-form{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;flex-direction:column;gap:9px;}
+.comment-input{width:100%;padding:9px 12px;background:var(--surface2);border:0.5px solid rgba(232,255,71,0.15);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;resize:none;}
+.comment-input:focus{border-color:var(--accent);}
+.comment-row{display:flex;gap:8px;align-items:center;}
+.comment-name-input{flex:1;padding:8px 11px;background:var(--surface2);border:0.5px solid rgba(232,255,71,0.15);border-radius:7px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;}
+.comment-name-input:focus{border-color:var(--accent);}
+.comment-submit{padding:8px 18px;background:var(--accent);color:#080c10;border:none;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.comment-list{display:flex;flex-direction:column;gap:9px;}
+.comment-item{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;}
+.comment-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.comment-author{display:flex;align-items:center;gap:8px;}
+.comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--surface2);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--accent);flex-shrink:0;}
+.comment-name{font-size:13px;font-weight:500;color:var(--text);}
+.comment-time{font-size:11px;color:var(--muted);}
+.comment-text{font-size:13px;color:var(--muted);line-height:1.55;margin-left:36px;}
+.comment-like{background:transparent;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;margin-left:36px;margin-top:6px;transition:color 0.15s;}
+.comment-like:hover,.comment-like.liked{color:var(--accent);}
+
+/* ===== ADMIN ===== */
+.admin-top{padding:18px 20px 14px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.admin-top h2{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:0.06em;}
+.admin-top span{font-size:12px;color:var(--muted);}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 18px;}
+.scard{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+.snum{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:0.04em;}
+.slabel{font-size:10px;color:var(--muted);margin-top:1px;}
+
+.admin-tabs{display:flex;gap:0;border-bottom:0.5px solid var(--border);overflow-x:auto;}
+.admin-tab{padding:10px 15px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.18s;white-space:nowrap;}
+.admin-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.admin-section-page{display:none;padding:16px 18px 24px;}
+.admin-section-page.active{display:block;}
+
+.form-block{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+.flabel{font-size:11px;color:var(--muted);margin-bottom:2px;}
+.finput,.fselect,.ftextarea{width:100%;padding:9px 12px;background:var(--surface2);border:0.5px solid rgba(232,255,71,0.15);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;}
+.ftextarea{resize:vertical;min-height:70px;}
+.finput:focus,.fselect:focus,.ftextarea:focus{border-color:var(--accent);}
+.fselect option{background:#101520;}
+.frow{display:flex;gap:9px;}
+.frow>div{flex:1;}
+.fdrop{border:1.5px dashed rgba(232,255,71,0.2);border-radius:10px;padding:22px;text-align:center;cursor:pointer;transition:border-color 0.18s;}
+.fdrop:hover{border-color:var(--accent);}
+.fdrop p{font-size:12px;color:var(--muted);margin-top:5px;}
+.fdrop strong{color:var(--accent);}
+.sbtn{padding:10px 16px;background:var(--accent);color:#080c10;border:none;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity 0.18s;width:100%;}
+.sbtn:hover{opacity:0.85;}
+.sbtn-outline{padding:10px 16px;background:transparent;color:var(--accent2);border:0.5px solid var(--accent2);border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;width:100%;transition:opacity 0.18s;}
+.sbtn-outline:hover{opacity:0.75;}
+
+.manage-list{display:flex;flex-direction:column;gap:8px;}
+.mitem{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+.micon{font-size:18px;width:30px;text-align:center;flex-shrink:0;}
+.minfo{flex:1;min-width:0;}
+.mtitle{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.msub{font-size:11px;color:var(--muted);}
+.mactions{display:flex;gap:6px;flex-shrink:0;}
+.abtn{padding:5px 10px;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid transparent;font-family:'DM Sans',sans-serif;transition:opacity 0.15s;}
+.abtn-toggle{background:var(--surface2);color:var(--muted);border-color:var(--border);}
+.abtn-toggle:hover{color:var(--text);}
+.abtn-del{background:transparent;color:var(--red);border-color:rgba(192,64,64,0.3);}
+.empty-state{font-size:13px;color:var(--muted);text-align:center;padding:24px 0;}
+
+/* LIVE PLAN */
+.plan-steps{display:flex;flex-direction:column;gap:12px;margin-top:4px;}
+.plan-step{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start;}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#080c10;font-family:'Bebas Neue',sans-serif;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-info h3{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.step-info p{font-size:12px;color:var(--muted);line-height:1.6;}
+.step-link{display:inline-block;margin-top:8px;font-size:12px;color:var(--accent2);text-decoration:none;border-bottom:0.5px solid rgba(0,201,255,0.3);}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--accent);color:#080c10;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:opacity 0.25s;pointer-events:none;z-index:9999;white-space:nowrap;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="logo">PRESS <span>PLAY</span> MEDIA</div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="switchView('fan',this)">Fan View</div>
+    <div class="nav-tab" onclick="switchView('admin',this)">▶ Admin</div>
+  </div>
+</nav>
+
+<!-- ===== FAN PAGE ===== -->
+<div class="page active" id="page-fan">
+  <div class="hero">
+    <div class="hero-badge">▶ Press Play Media Productions</div>
+    <h1>Exclusive <span>Content</span><br>For Real Fans</h1>
+    <p id="hero-tagline">Music, videos, merch & more — drop before the world hears it.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" id="join-btn" onclick="toast('Member signup — connect Stripe to go live!')">Join Free</button>
+      <button class="btn-secondary" onclick="toast('Premium unlocks all exclusive content!')">Go Premium ✦</button>
+    </div>
+  </div>
+
+  <div class="fan-tabs">
+    <div class="fan-tab active" onclick="switchFanTab('music',this)">🎵 Music</div>
+    <div class="fan-tab" onclick="switchFanTab('video',this)">🎬 Videos</div>
+    <div class="fan-tab" onclick="switchFanTab('photo',this)">📸 Gallery</div>
+    <div class="fan-tab" onclick="switchFanTab('merch',this)">🛍 Merch</div>
+    <div class="fan-tab" onclick="switchFanTab('announce',this)">📢 News</div>
+  </div>
+
+  <div class="fan-section active" id="fs-music">
+    <div class="sec-label">Latest Drops</div>
+    <div class="content-list" id="list-music"></div>
+    <div class="comments-section">
+      <div class="comments-header">💬 <span id="music-comment-count">0</span> Fan Comments</div>
+      <div class="comment-form">
+        <textarea class="comment-input" id="music-comment-text" rows="2" placeholder="Leave a comment for this section..."></textarea>
+        <div class="comment-row">
+          <input class="comment-name-input" id="music-comment-name" placeholder="Your name" />
+          <button class="comment-submit" onclick="addComment('music')">Post ▶</button>
+        </div>
+      </div>
+      <div class="comment-list" id="music-comments"></div>
+    </div>
+  </div>
+
+  <div class="fan-section" id="fs-video">
+    <div class="sec-label">Now Playing</div>
+    <div class="video-player" id="video-player">
+      <div class="video-screen" onclick="togglePlay()">
+        <div class="video-screen-inner">
+          <div class="play-btn-big" id="play-btn">▶</div>
+          <div class="video-title-overlay" id="now-playing-title">Select a video below to play</div>
+        </div>
+      </div>
+      <div class="video-controls">
+        <button class="vc-btn" onclick="togglePlay()" id="vc-play">▶</button>
+        <div class="progress-bar" onclick="seekVideo(event)">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="vc-time" id="vc-time">0:00</div>
+      </div>
+      <div class="video-info">
+        <h3 id="video-info-title">No video selected</h3>
+        <p id="video-info-desc">Click a video below to load it</p>
+      </div>
+    </div>
+    <div class="sec-label">All Videos</div>
+    <div class="content-list" id="list-video"></div>
+    <div class="comments-section">
+      <div class="comments-header">💬 <span id="video-comment-count">0</span> Fan Comments</div>
+      <div class="comment-form">
+        <textarea class="comment-input" id="video-comment-text" rows="2" placeholder="What did you think of this video?"></textarea>
+        <div class="comment-row">
+          <input class="comment-name-input" id="video-comment-name" placeholder="Your name" />
+          <button class="comment-submit" onclick="addComment('video')">Post ▶</button>
+        </div>
+      </div>
+      <div class="comment-list" id="video-comments"></div>
+    </div>
+  </div>
+
+  <div class="fan-section" id="fs-photo">
+    <div class="sec-label">Gallery</div>
+    <div class="content-list" id="list-photo"></div>
+    <div class="comments-section">
+      <div class="comments-header">💬 <span id="photo-comment-count">0</span> Fan Comments</div>
+      <div class="comment-form">
+        <textarea class="comment-input" id="photo-comment-text" rows="2" placeholder="Share your thoughts..."></textarea>
+        <div class="comment-row">
+          <input class="comment-name-input" id="photo-comment-name" placeholder="Your name" />
+          <button class="comment-submit" onclick="addComment('photo')">Post ▶</button>
+        </div>
+      </div>
+      <div class="comment-list" id="photo-comments"></div>
+    </div>
+  </div>
+
+  <div class="fan-section" id="fs-merch">
+    <div class="sec-label">Official Merch</div>
+    <div class="merch-grid" id="list-merch"></div>
+  </div>
+
+  <div class="fan-section" id="fs-announce">
+    <div class="sec-label">Latest News</div>
+    <div class="ann-list" id="list-announce"></div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PAGE ===== -->
+<div class="page" id="page-admin">
+  <div class="admin-top">
+    <h2>▶ Creator Dashboard</h2>
+    <span>Press Play Media Productions</span>
+  </div>
+  <div class="stats-row">
+    <div class="scard"><div class="snum" id="st-content">0</div><div class="slabel">Content</div></div>
+    <div class="scard"><div class="snum" id="st-free">0</div><div class="slabel">Free</div></div>
+    <div class="scard"><div class="snum" id="st-prem">0</div><div class="slabel">Premium</div></div>
+    <div class="scard"><div class="snum" id="st-merch">0</div><div class="slabel">Merch Items</div></div>
+  </div>
+  <div class="admin-tabs">
+    <div class="admin-tab active" onclick="switchAdminTab('upload',this)">Upload</div>
+    <div class="admin-tab" onclick="switchAdminTab('announce-admin',this)">Announce</div>
+    <div class="admin-tab" onclick="switchAdminTab('merch-admin',this)">Merch</div>
+    <div class="admin-tab" onclick="switchAdminTab('manage',this)">Manage</div>
+    <div class="admin-tab" onclick="switchAdminTab('golive',this)">Go Live</div>
+    <div class="admin-tab" onclick="switchAdminTab('settings',this)">Settings</div>
+  </div>
+
+  <!-- UPLOAD -->
+  <div class="admin-section-page active" id="ap-upload">
+    <div class="form-block">
+      <div><div class="flabel">Content title</div><input class="finput" id="u-title" placeholder="e.g. Unreleased Track: Neon Dreams" /></div>
+      <div class="frow">
+        <div><div class="flabel">Type</div>
+          <select class="fselect" id="u-type">
+            <option value="music">🎵 Music / Audio</option>
+            <option value="video">🎬 Video</option>
+            <option value="photo">📸 Photo / Gallery</option>
+          </select>
+        </div>
+        <div><div class="flabel">Access</div>
+          <select class="fselect" id="u-access">
+            <option value="free">Free</option>
+            <option value="premium">✦ Premium</option>
+          </select>
+        </div>
+      </div>
+      <div><div class="flabel">Description</div><input class="finput" id="u-desc" placeholder="Short description for fans" /></div>
+      <div class="fdrop" onclick="toast('Connect Supabase Storage to enable real file uploads!')">
+        <div style="font-size:28px">📁</div>
+        <p><strong>Click to upload file</strong></p>
+        <p>Audio, video, or image — connect cloud storage to activate</p>
+      </div>
+      <button class="sbtn" onclick="addContent()">▶ Publish Content</button>
+    </div>
+  </div>
+
+  <!-- ANNOUNCE -->
+  <div class="admin-section-page" id="ap-announce-admin">
+    <div class="form-block">
+      <div><div class="flabel">Announcement title</div><input class="finput" id="an-title" placeholder="e.g. New album dropping next Friday!" /></div>
+      <div class="frow">
+        <div><div class="flabel">Tag</div>
+          <select class="fselect" id="an-tag">
+            <option>New Release</option><option>Tour</option><option>Update</option>
+            <option>Exclusive</option><option>Merch Drop</option>
+          </select>
+        </div>
+        <div><div class="flabel">Date</div><input class="finput" id="an-date" type="date" /></div>
+      </div>
+      <div><div class="flabel">Message</div><textarea class="ftextarea" id="an-body" placeholder="Tell your fans what's happening..."></textarea></div>
+      <button class="sbtn" onclick="addAnnouncement()">▶ Post Announcement</button>
+    </div>
+    <div class="manage-list" id="manage-announce"></div>
+  </div>
+
+  <!-- MERCH -->
+  <div class="admin-section-page" id="ap-merch-admin">
+    <div class="form-block">
+      <div><div class="flabel">Item name</div><input class="finput" id="m-name" placeholder="e.g. Press Play Hoodie" /></div>
+      <div class="frow">
+        <div><div class="flabel">Price ($)</div><input class="finput" id="m-price" placeholder="35.00" type="number" min="0" /></div>
+        <div><div class="flabel">Emoji / Icon</div><input class="finput" id="m-emoji" placeholder="👕" /></div>
+      </div>
+      <div><div class="flabel">Description</div><input class="finput" id="m-desc" placeholder="Short product description" /></div>
+      <button class="sbtn" onclick="addMerch()">▶ Add to Store</button>
+    </div>
+    <div class="manage-list" id="manage-merch"></div>
+  </div>
+
+  <!-- MANAGE -->
+  <div class="admin-section-page" id="ap-manage">
+    <div class="manage-list" id="manage-content"></div>
+  </div>
+
+  <!-- GO LIVE PLAN -->
+  <div class="admin-section-page" id="ap-golive">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6;">Follow these 5 steps to turn this into a fully live platform your fans can access anywhere.</p>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-num">1</div>
+        <div class="step-info">
+          <h3>Download this file</h3>
+          <p>You already have the full app as an HTML file. This is your foundation — everything runs from it.</p>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-num">2</div>
+        <div class="step-info">
+          <h3>Create a free Vercel account</h3>
+          <p>Go to vercel.com, sign up free, drag and drop your HTML file. Your platform is instantly live at a public URL — takes under 2 minutes.</p>
+          <a class="step-link" href="https://vercel.com" target="_blank">vercel.com →</a>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-num">3</div>
+        <div class="step-info">
+          <h3>Connect Supabase for storage & accounts</h3>
+          <p>Free account at supabase.com. This stores your uploaded files, fan accounts, and all your content data in a real database.</p>
+          <a class="step-link" href="https://supabase.com" target="_blank">supabase.com →</a>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-num">4</div>
+        <div class="step-info">
+          <h3>Add Stripe for paid memberships & merch</h3>
+          <p>Create a free Stripe account. Lets fans pay for premium access and buy merch. You get paid directly to your bank account.</p>
+          <a class="step-link" href="https://stripe.com" target="_blank">stripe.com →</a>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-num">5</div>
+        <div class="step-info">
+          <h3>Connect your custom domain (optional)</h3>
+          <p>Buy pressplaymedia.com or similar from Namecheap (~$12/yr) and point it to your Vercel URL. Fans visit your own branded address.</p>
+          <a class="step-link" href="https://namecheap.com" target="_blank">namecheap.com →</a>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding:14px;background:var(--surface);border:0.5px solid var(--border);border-radius:12px;">
+      <p style="font-size:12px;color:var(--muted);line-height:1.7;"><strong style="color:var(--accent);">Total cost to go fully live:</strong> Vercel free tier · Supabase free tier · Stripe 2.9% per transaction · Domain ~$12/yr. You can start for $0.</p>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="admin-section-page" id="ap-settings">
+    <div class="form-block">
+      <div style="font-size:12px;color:var(--accent);font-weight:500;margin-bottom:4px;">Platform Branding</div>
+      <div><div class="flabel">Platform name</div><input class="finput" id="s-name" value="Press Play Media Productions" /></div>
+      <div><div class="flabel">Tagline</div><input class="finput" id="s-tagline" value="Music, videos, merch & more — drop before the world hears it." /></div>
+      <div><div class="flabel">Join button text</div><input class="finput" id="s-jointext" value="Join Free" /></div>
+      <button class="sbtn" onclick="saveSettings()">▶ Save Settings</button>
+    </div>
+    <div class="form-block">
+      <div style="font-size:12px;color:var(--accent2);font-weight:500;margin-bottom:4px;">Integrations</div>
+      <button class="sbtn-outline" style="margin-bottom:8px" onclick="toast('Connect Stripe — see the Go Live tab for instructions')">💳 Connect Stripe Payments</button>
+      <button class="sbtn-outline" style="margin-bottom:8px" onclick="toast('Connect Supabase — see the Go Live tab for instructions')">☁️ Connect Cloud Storage</button>
+      <button class="sbtn-outline" onclick="toast('Connect email to notify fans of new drops')">📧 Connect Email Notifications</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+const typeIcon={music:'🎵',video:'🎬',photo:'📸'};
+const typeThumb={music:'tm',video:'tv',photo:'tp'};
+let nextId=20;
+let videoPlaying=false;
+let videoProgress=0;
+let videoTimer=null;
+let currentVideo=null;
+
+let state={
+  content:[
+    {id:1,title:'Midnight Sessions Vol. 1',type:'music',access:'free',desc:'Lo-fi beats & raw demos'},
+    {id:2,title:'Studio Diaries — Ep. 3',type:'video',access:'premium',desc:'Behind the scenes in the booth'},
+    {id:3,title:'Tour Photo Dump 2024',type:'photo',access:'free',desc:'Unfiltered tour moments'},
+    {id:4,title:'Unreleased: "Neon Dreams"',type:'music',access:'premium',desc:'Never heard before — members only'},
+    {id:5,title:'Live at The Roxy',type:'video',access:'free',desc:'Full live set recording'},
+  ],
+  merch:[
+    {id:10,name:'Press Play Hoodie',price:'45.00',emoji:'👕',desc:'Premium heavyweight hoodie'},
+    {id:11,name:'Logo Cap',price:'28.00',emoji:'🧢',desc:'Embroidered logo cap'},
+    {id:12,name:'Vinyl Bundle',price:'35.00',emoji:'💿',desc:'Limited edition signed vinyl'},
+    {id:13,name:'Tote Bag',price:'18.00',emoji:'👜',desc:'100% organic cotton'},
+  ],
+  announcements:[
+    {id:14,title:'New EP drops Friday!',tag:'New Release',date:'2026-06-06',body:'We\'ve been working on this for months — members get it 48 hours before the world.'},
+    {id:15,title:'Summer Tour Dates Announced',tag:'Tour',date:'2026-05-28',body:'10 cities, 12 shows. Presale for members starts Tuesday at noon.'},
+  ],
+  comments:{music:[],video:[],photo:[]}
+};
+
+function switchView(view,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+view).classList.add('active');
+  el.classList.add('active');
+  render();
+}
+function switchFanTab(tab,el){
+  document.querySelectorAll('.fan-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.fan-section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('fs-'+tab).classList.add('active');
+}
+function switchAdminTab(tab,el){
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.admin-section-page').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('ap-'+tab).classList.add('active');
+  render();
+}
+
+// VIDEO PLAYER
+function loadVideo(item){
+  currentVideo=item;
+  document.getElementById('now-playing-title').textContent=item.title;
+  document.getElementById('video-info-title').textContent=item.title;
+  document.getElementById('video-info-desc').textContent=item.desc||'';
+  videoProgress=0;
+  document.getElementById('progress-fill').style.width='0%';
+  document.getElementById('vc-time').textContent='0:00';
+  if(videoPlaying){clearInterval(videoTimer);}
+  videoPlaying=false;
+  document.getElementById('vc-play').textContent='▶';
+  document.getElementById('play-btn').textContent='▶';
+  toast('▶ Loaded: '+item.title+(item.access==='premium'?' — Connect payment to unlock for members':''));
+}
+function togglePlay(){
+  if(!currentVideo){toast('Select a video from the list below');return;}
+  videoPlaying=!videoPlaying;
+  document.getElementById('vc-play').textContent=videoPlaying?'⏸':'▶';
+  document.getElementById('play-btn').textContent=videoPlaying?'⏸':'▶';
+  if(videoPlaying){
+    videoTimer=setInterval(()=>{
+      videoProgress=Math.min(videoProgress+0.4,100);
+      document.getElementById('progress-fill').style.width=videoProgress+'%';
+      const secs=Math.round(videoProgress*1.8);
+      document.getElementById('vc-time').textContent=Math.floor(secs/60)+':'+(secs%60).toString().padStart(2,'0');
+      if(videoProgress>=100){clearInterval(videoTimer);videoPlaying=false;document.getElementById('vc-play').textContent='▶';document.getElementById('play-btn').textContent='▶';}
+    },300);
+  }else{clearInterval(videoTimer);}
+}
+function seekVideo(e){
+  const bar=e.currentTarget;
+  const ratio=e.offsetX/bar.offsetWidth;
+  videoProgress=ratio*100;
+  document.getElementById('progress-fill').style.width=videoProgress+'%';
+}
+
+// COMMENTS
+function addComment(section){
+  const text=document.getElementById(section+'-comment-text').value.trim();
+  const name=document.getElementById(section+'-comment-name').value.trim()||'Fan';
+  if(!text){toast('Write something first!');return;}
+  const now=new Date();
+  const timeStr=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' today';
+  state.comments[section].unshift({id:nextId++,name,text,time:timeStr,likes:0,liked:false});
+  document.getElementById(section+'-comment-text').value='';
+  renderComments(section);
+  toast('Comment posted! ▶');
+}
+function likeComment(section,id){
+  const c=state.comments[section].find(c=>c.id===id);
+  if(c){c.liked=!c.liked;c.likes+=c.liked?1:-1;renderComments(section);}
+}
+function renderComments(section){
+  const list=document.getElementById(section+'-comments');
+  const count=document.getElementById(section+'-comment-count');
+  if(count)count.textContent=state.comments[section].length;
+  if(!list)return;
+  if(!state.comments[section].length){list.innerHTML='<p style="font-size:13px;color:var(--muted);padding:8px 0;">No comments yet — be the first!</p>';return;}
+  list.innerHTML=state.comments[section].map(c=>`
+    <div class="comment-item">
+      <div class="comment-top">
+        <div class="comment-author">
+          <div class="comment-avatar">${c.name.charAt(0).toUpperCase()}</div>
+          <span class="comment-name">${c.name}</span>
+        </div>
+        <span class="comment-time">${c.time}</span>
+      </div>
+      <div class="comment-text">${c.text}</div>
+      <button class="comment-like ${c.liked?'liked':''}" onclick="likeComment('${section}',${c.id})">
+        ${c.liked?'♥':'♡'} ${c.likes>0?c.likes+' like'+(c.likes>1?'s':''):'Like'}
+      </button>
+    </div>`).join('');
+}
+
+function render(){
+  ['music','video','photo'].forEach(type=>{
+    const el=document.getElementById('list-'+type);
+    if(!el)return;
+    const items=state.content.filter(c=>c.type===type);
+    if(!items.length){el.innerHTML='<p class="empty-state">No content yet.</p>';return;}
+    el.innerHTML=items.map(i=>`
+      <div class="content-card ${i.access==='premium'?'locked':''}" onclick="${i.type==='video'?'loadVideo('+JSON.stringify(i)+')':'toast(\''+i.title+(i.access==='premium'?' — Premium: connect payment to unlock':''\')'}">
+        <div class="cthumb ${typeThumb[i.type]}">${typeIcon[i.type]}</div>
+        <div class="cinfo"><div class="ctitle">${i.title}</div><div class="cmeta">${i.desc||''}</div></div>
+        <span class="badge ${i.access==='premium'?'bp':'bf'}">${i.access==='premium'?'✦ Premium':'Free'}</span>
+      </div>`).join('');
+    renderComments(type);
+  });
+
+  const mg=document.getElementById('list-merch');
+  if(mg){
+    mg.innerHTML=state.merch.length?state.merch.map(m=>`
+      <div class="merch-card">
+        <div class="merch-img">${m.emoji||'📦'}</div>
+        <div class="merch-info">
+          <div class="merch-name">${m.name}</div>
+          <div class="merch-price">$${parseFloat(m.price).toFixed(2)}</div>
+          <div class="merch-desc">${m.desc||''}</div>
+          <button class="merch-buy" onclick="toast('Connect Stripe to enable checkout!')">Buy Now</button>
+        </div>
+      </div>`).join(''):'<p class="empty-state" style="grid-column:span 2">No merch yet.</p>';
+  }
+
+  const al=document.getElementById('list-announce');
+  if(al){
+    al.innerHTML=state.announcements.length?[...state.announcements].reverse().map(a=>`
+      <div class="ann-card">
+        <div class="ann-top"><span class="ann-tag">${a.tag}</span><span class="ann-date">${a.date}</span></div>
+        <div class="ann-title">${a.title}</div>
+        <div class="ann-body">${a.body}</div>
+      </div>`).join(''):'<p class="empty-state">No announcements yet.</p>';
+  }
+
+  const mc=document.getElementById('manage-content');
+  if(mc){
+    mc.innerHTML=state.content.length?state.content.map(i=>`
+      <div class="mitem">
+        <div class="micon">${typeIcon[i.type]}</div>
+        <div class="minfo"><div class="mtitle">${i.title}</div><div class="msub">${i.access==='premium'?'✦ Premium':'Free'} · ${i.type}</div></div>
+        <div class="mactions">
+          <button class="abtn abtn-toggle" onclick="toggleAccess(${i.id})">${i.access==='premium'?'Make Free':'Make Premium'}</button>
+          <button class="abtn abtn-del" onclick="delContent(${i.id})">✕ Remove</button>
+        </div>
+      </div>`).join(''):'<p class="empty-state">No content published yet.</p>';
+  }
+
+  const mm=document.getElementById('manage-merch');
+  if(mm){
+    mm.innerHTML=state.merch.length?state.merch.map(m=>`
+      <div class="mitem">
+        <div class="micon">${m.emoji||'📦'}</div>
+        <div class="minfo"><div class="mtitle">${m.name}</div><div class="msub">$${parseFloat(m.price).toFixed(2)} · ${m.desc||''}</div></div>
+        <div class="mactions"><button class="abtn abtn-del" onclick="delMerch(${m.id})">✕ Remove</button></div>
+      </div>`).join(''):'<p class="empty-state">No merch added yet.</p>';
+  }
+
+  const ma=document.getElementById('manage-announce');
+  if(ma){
+    ma.innerHTML=state.announcements.length?[...state.announcements].reverse().map(a=>`
+      <div class="mitem">
+        <div class="micon">📢</div>
+        <div class="minfo"><div class="mtitle">${a.title}</div><div class="msub">${a.tag} · ${a.date}</div></div>
+        <div class="mactions"><button class="abtn abtn-del" onclick="delAnn(${a.id})">✕ Remove</button></div>
+      </div>`).join(''):'<p class="empty-state">No announcements yet.</p>';
+  }
+
+  document.getElementById('st-content').textContent=state.content.length;
+  document.getElementById('st-free').textContent=state.content.filter(c=>c.access==='free').length;
+  document.getElementById('st-prem').textContent=state.content.filter(c=>c.access==='premium').length;
+  document.getElementById('st-merch').textContent=state.merch.length;
+}
+
+function addContent(){
+  const t=document.getElementById('u-title').value.trim();
+  if(!t){toast('Enter a title first');return;}
+  state.content.push({id:nextId++,title:t,type:document.getElementById('u-type').value,access:document.getElementById('u-access').value,desc:document.getElementById('u-desc').value.trim()});
+  document.getElementById('u-title').value='';document.getElementById('u-desc').value='';
+  render();toast('▶ Content published!');
+}
+function addAnnouncement(){
+  const t=document.getElementById('an-title').value.trim();
+  if(!t){toast('Enter a title first');return;}
+  const d=document.getElementById('an-date').value||new Date().toISOString().slice(0,10);
+  state.announcements.push({id:nextId++,title:t,tag:document.getElementById('an-tag').value,date:d,body:document.getElementById('an-body').value.trim()});
+  document.getElementById('an-title').value='';document.getElementById('an-body').value='';
+  render();toast('▶ Announcement posted!');
+}
+function addMerch(){
+  const n=document.getElementById('m-name').value.trim();
+  const p=document.getElementById('m-price').value;
+  if(!n||!p){toast('Enter name and price');return;}
+  state.merch.push({id:nextId++,name:n,price:p,emoji:document.getElementById('m-emoji').value||'📦',desc:document.getElementById('m-desc').value.trim()});
+  document.getElementById('m-name').value='';document.getElementById('m-price').value='';
+  document.getElementById('m-emoji').value='';document.getElementById('m-desc').value='';
+  render();toast('▶ Merch item added!');
+}
+function toggleAccess(id){const i=state.content.find(c=>c.id===id);if(i){i.access=i.access==='premium'?'free':'premium';render();toast('Access updated!');}}
+function delContent(id){state.content=state.content.filter(c=>c.id!==id);render();toast('Removed');}
+function delMerch(id){state.merch=state.merch.filter(m=>m.id!==id);render();toast('Removed');}
+function delAnn(id){state.announcements=state.announcements.filter(a=>a.id!==id);render();toast('Removed');}
+function saveSettings(){
+  const n=document.getElementById('s-name').value.trim();
+  const tl=document.getElementById('s-tagline').value.trim();
+  const jt=document.getElementById('s-jointext').value.trim();
+  if(n)document.querySelector('.logo').innerHTML=n;
+  if(tl)document.getElementById('hero-tagline').textContent=tl;
+  if(jt)document.getElementById('join-btn').textContent=jt;
+  toast('▶ Settings saved!');
+}
+function toast(msg){
+  const el=document.getElementById('toastEl');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2400);
+}
+render();
+</script>
+</body>
+</html>

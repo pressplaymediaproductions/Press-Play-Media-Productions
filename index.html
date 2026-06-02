@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Press Play Media Productions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+
+<nav class="nav">
+  <div class="logo">PRESS <span>PLAY</span> MEDIA</div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="switchView('fan',this)">Fan View</div>
+    <div class="nav-tab" onclick="switchView('admin',this)">▶ Admin</div>
+  </div>
+</nav>
+
+<div class="user-bar" id="user-bar">
+  <span id="user-email">Not signed in</span>
+  <button class="small-btn" onclick="signOut()">Sign Out</button>
+</div>
+
+<div class="auth-panel" id="auth-panel">
+  <h2>▶ Fan Login</h2>
+  <p class="auth-note">Create a free account or log in to access the Press Play Media Productions fan platform.</p>
+  <input class="finput" id="auth-email" placeholder="Email" type="email" />
+  <input class="finput" id="auth-password" placeholder="Password" type="password" />
+  <button class="sbtn" onclick="signUpEmail()">Create Account</button>
+  <button class="sbtn-outline" onclick="signInEmail()">Log In</button>
+  <button class="sbtn-outline" onclick="signInGoogle()">Continue with Google</button>
+  <p class="auth-note">Google login requires Google provider setup in Supabase Authentication.</p>
+</div>
+
+<div id="app-shell" class="hidden">
+
+<!-- ===== FAN PAGE ===== -->
+<div class="page active" id="page-fan">
+  <div class="hero">
+    <div class="hero-badge">▶ Press Play Media Productions</div>
+    <h1>Exclusive <span>Content</span><br>For Real Fans</h1>
+    <p id="hero-tagline">Music, videos, merch & more — drop before the world hears it.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" id="join-btn" onclick="toast('Member signup — connect Stripe to go live!')">Join Free</button>
+      <button class="btn-secondary" onclick="toast('Premium unlocks all exclusive content!')">Go Premium ✦</button>
+    </div>
+  </div>
+
+  <div class="fan-tabs">
+    <div class="fan-tab active" onclick="switchFanTab('music',this)">🎵 Music</div>
+    <div class="fan-tab" onclick="switchFanTab('video',this)">🎬 Videos</div>
+    <div class="fan-tab" onclick="switchFanTab('photo',this)">📸 Gallery</div>
+    <div class="fan-tab" onclick="switchFanTab('merch',this)">🛍 Merch</div>
+    <div class="fan-tab" onclick="switchFanTab('announce',this)">📢 News</div>
+  </div>
+
+  <div class="fan-section active" id="fs-music">
+    <div class="sec-label">Latest Drops</div>
+    <div class="content-list" id="list-music"></div>
+    <div class="comments-section">
+      <div class="comments-header">💬 <span id="music-comment-count">0</span> Fan Comments</div>
+      <div class="comment-form">
+        <textarea class="comment-input" id="music-comment-text" rows="2" placeholder="Leave a comment for this section..."></textarea>
+        <div class="comment-row">
+          <input class="comment-name-input" id="music-comment-name" placeholder="Your name" />
+          <button class="comment-submit" onclick="addComment('music')">Post ▶</button>
+        </div>
+      </div>
+      <div class="comment-list" id="music-comments"></div>
+    </div>
+  </div>
+
+  <div class="fan-section" id="fs-video">
+    <div class="sec-label">Now Playing</div>
+    <div class="video-player" id="video-player">
+      <div class="video-screen" onclick="togglePlay()">
+        <div class="video-screen-inner">
+          <div class="play-btn-big" id="play-btn">▶</div>
+          <div class="video-title-overlay" id="now-playing-title">Select a video below to play</div>
+        </div>
+      </div>
+      <div class="video-controls">
+        <button class="vc-btn" onclick="togglePlay()" id="vc-play">▶</button>
+        <div class="progress-bar" onclick="seekVideo(event)">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="vc-time" id="vc-time">0:00</div>
+      </div>
+      <div class="video-info">
+        <h3 id="video-info-title">No video selected</h3>
+        <p id="video-info-desc">Click a video below to load it</p>
+      </div>
+    </div>
+    <div class="sec-label">All Videos</div>
+    <div class="content-list" id="list-video"></div>
+    <div class="comments-section">
+      <div class="comments-header">💬 <span id="video-comment-count">0</span> Fan Comments</div>
+      <div class="comment-form">
+        <textarea class="comment-input" id="video-comment-text" rows="2" placeholder="What did you think of this video?"></textarea>
+        <div class="comment-row">
+          <input class="comment-name-input" id="video-comment-name" placeholder="Your name" />
+          <button class="comment-submit" onclick="addComment('video')">Post ▶</button>
+        </div>
+      </div>
+      <div class="comment-list" id="video-comments"></div>
+    </div>
+  </div>
+
+  <div class="fan-section" id="fs-photo">
+    <div class="sec-label">Gallery</div>
+    <div class="content-list" id="list-photo"></div>
+    <div class="comments-section">
+      <div class="comments-header">💬 <span id="photo-comment-count">0</span> Fan Comments</div>
+      <div class="comment-form">
+        <textarea class="comment-input" id="photo-comment-text" rows="2" placeholder="Share your thoughts..."></textarea>
+        <div class="comment-row">
+          <input class="comment-name-input" id="photo-comment-name" placeholder="Your name" />
+          <button class="comment-submit" onclick="addComment('photo')">Post ▶</button>
+        </div>
+      </div>
+      <div class="comment-list" id="photo-comments"></div>
+    </div>
+  </div>
+
+  <div class="fan-section" id="fs-merch">
+    <div class="sec-label">Official Merch</div>
+    <div class="merch-grid" id="list-merch"></div>
+  </div>
+
+  <div class="fan-section" id="fs-announce">
+    <div class="sec-label">Latest News</div>
+    <div class="ann-list" id="list-announce"></div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PAGE ===== -->
+<div class="page" id="page-admin">
+  <div class="admin-top">
+    <h2>▶ Creator Dashboard</h2>
+    <span>Press Play Media Productions</span>
+  </div>
+  <div class="stats-row">
+    <div class="scard"><div class="snum" id="st-content">0</div><div class="slabel">Content</div></div>
+    <div class="scard"><div class="snum" id="st-free">0</div><div class="slabel">Free</div></div>
+    <div class="scard"><div class="snum" id="st-prem">0</div><div class="slabel">Premium</div></div>
+    <div class="scard"><div class="snum" id="st-merch">0</div><div class="slabel">Merch Items</div></div>
+  </div>
+  <div class="admin-tabs">
+    <div class="admin-tab active" onclick="switchAdminTab('upload',this)">Upload</div>
+    <div class="admin-tab" onclick="switchAdminTab('announce-admin',this)">Announce</div>
+    <div class="admin-tab" onclick="switchAdminTab('merch-admin',this)">Merch</div>
+    <div class="admin-tab" onclick="switchAdminTab('manage',this)">Manage</div>
+    <div class="admin-tab" onclick="switchAdminTab('golive',this)">Go Live</div>
+    <div class="admin-tab" onclick="switchAdminTab('settings',this)">Settings</div>
+  </div>
+
+  <!-- UPLOAD -->
+  <div class="admin-section-page active" id="ap-upload">
+    <div class="form-block">
+      <div><div class="flabel">Content title</div><input class="finput" id="u-title" placeholder="e.g. Unreleased Track: Neon Dreams" /></div>
+      <div class="frow">
+        <div><div class="flabel">Type</div>
+          <select class="fselect" id="u-type">
+            <option value="music">🎵 Music / Audio</option>
+            <option value="video">🎬 Video</option>
+            <option value="photo">📸 Photo / Gallery</option>
+          </select>
+        </div>
+        <div><div class="flabel">Access</div>
+          <select class="fselect" id="u-access">
+            <option value="free">Free</option>
+            <option value="premium">✦ Premium</option>
+          </select>
+        </div>
+      </div>
+      <div><div class="flabel">Description</div><input class="finput" id="u-desc" placeholder="Short description for fans" /></div>
+      <div class="fdrop" onclick="toast('Connect Supabase Storage to enable real file uploads!')">
+        <div style="font-size:28px">📁</div>
+        <p><strong>Click to upload file</strong></p>
+        <p>Audio, video, or image — connect cloud storage to activate</p>
+      </div>
+      <button class="sbtn" onclick="addContent()">▶ Publish Content</button>
+    </div>
+  </div>
+
+  <!-- ANNOUNCE -->
+  <div class="admin-section-page" id="ap-announce-admin">
+    <div class="form-block">
+      <div><div class="flabel">Announcement title</div><input class="finput" id="an-title" placeholder="e.g. New album dropping next Friday!" /></div>
+      <div class="frow">
+        <div><div class="flabel">Tag</div>
+          <select class="fselect" id="an-tag">
+            <option>New Release</option><option>Tour</option><option>Update</option>
+            <option>Exclusive</option><option>Merch Drop</option>
+          </select>
+        </div>
+        <div><div class="flabel">Date</div><input class="finput" id="an-date" type="date" /></div>
+      </div>
+      <div><div class="flabel">Message</div><textarea class="ftextarea" id="an-body" placeholder="Tell your fans what's happening..."></textarea></div>
+      <button class="sbtn" onclick="addAnnouncement()">▶ Post Announcement</button>
+    </div>
+    <div class="manage-list" id="manage-announce"></div>
+  </div>
+
+  <!-- MERCH -->
+  <div class="admin-section-page" id="ap-merch-admin">
+    <div class="form-block">
+      <div><div class="flabel">Item name</div><input class="finput" id="m-name" placeholder="e.g. Press Play Hoodie" /></div>
+      <div class="frow">
+        <div><div class="flabel">Price ($)</div><input class="finput" id="m-price" placeholder="35.00" type="number" min="0" /></div>
+        <div><div class="flabel">Emoji / Icon</div><input class="finput" id="m-emoji" placeholder="👕" /></div>
+      </div>
+      <div><div class="flabel">Description</div><input class="finput" id="m-desc" placeholder="Short product description" /></div>
+      <button class="sbtn" onclick="addMerch()">▶ Add to Store</button>
+    </div>
+    <div class="manage-list" id="manage-merch"></div>
+  </div>
+
+  <!-- MANAGE -->
+  <div class="admin-section-page" id="ap-manage">
+    <div class="manage-list" id="manage-content"></div>
+  </div>
+
+  <!-- GO LIVE PLAN -->
+  <div class="admin-section-page" id="ap-golive">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6;">Follow these 5 steps to turn this into a fully live platform your fans can access anywhere.</p>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-num">1</div>
+        <div class="step-info">
+          <h3>Download this file</h3>
+          <p>You already have the full app as an HTML file. This is your foundation — everything runs from it.</p>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-num">2</div>
+        <div class="step-info">
+          <h3>Create a free Vercel account</h3>
+          <p>Go to vercel.com, sign up free, drag and drop your HTML file. Your platform is instantly live at a public URL — takes under 2 minutes.</p>
+          <a class="step-link" href="https://vercel.com" target="_blank">vercel.com →</a>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-num">3</div>
+        <div class="step-info">
+          <h3>Connect Supabase for storage & accounts</h3>
+          <p>Free account at supabase.com. This stores your uploaded files, fan accounts, and all your content data in a real database.</p>
+          <a class="step-link" href="https://supabase.com" target="_blank">supabase.com →</a>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-num">4</div>
+        <div class="step-info">
+          <h3>Add Stripe for paid memberships & merch</h3>
+          <p>Create a free Stripe account. Lets fans pay for premium access and buy merch. You get paid directly to your bank account.</p>
+          <a class="step-link" href="https://stripe.com" target="_blank">stripe.com →</a>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-num">5</div>
+        <div class="step-info">
+          <h3>Connect your custom domain (optional)</h3>
+          <p>Buy pressplaymedia.com or similar from Namecheap (~$12/yr) and point it to your Vercel URL. Fans visit your own branded address.</p>
+          <a class="step-link" href="https://namecheap.com" target="_blank">namecheap.com →</a>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding:14px;background:var(--surface);border:0.5px solid var(--border);border-radius:12px;">
+      <p style="font-size:12px;color:var(--muted);line-height:1.7;"><strong style="color:var(--accent);">Total cost to go fully live:</strong> Vercel free tier · Supabase free tier · Stripe 2.9% per transaction · Domain ~$12/yr. You can start for $0.</p>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="admin-section-page" id="ap-settings">
+    <div class="form-block">
+      <div style="font-size:12px;color:var(--accent);font-weight:500;margin-bottom:4px;">Platform Branding</div>
+      <div><div class="flabel">Platform name</div><input class="finput" id="s-name" value="Press Play Media Productions" /></div>
+      <div><div class="flabel">Tagline</div><input class="finput" id="s-tagline" value="Music, videos, merch & more — drop before the world hears it." /></div>
+      <div><div class="flabel">Join button text</div><input class="finput" id="s-jointext" value="Join Free" /></div>
+      <button class="sbtn" onclick="saveSettings()">▶ Save Settings</button>
+    </div>
+    <div class="form-block">
+      <div style="font-size:12px;color:var(--accent2);font-weight:500;margin-bottom:4px;">Integrations</div>
+      <button class="sbtn-outline" style="margin-bottom:8px" onclick="toast('Connect Stripe — see the Go Live tab for instructions')">💳 Connect Stripe Payments</button>
+      <button class="sbtn-outline" style="margin-bottom:8px" onclick="toast('Connect Supabase — see the Go Live tab for instructions')">☁️ Connect Cloud Storage</button>
+      <button class="sbtn-outline" onclick="toast('Connect email to notify fans of new drops')">📧 Connect Email Notifications</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
