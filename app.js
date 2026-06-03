@@ -1,4 +1,5 @@
 
+
 const typeIcon={music:'🎵',video:'🎬',photo:'📸'};
 const typeThumb={music:'tm',video:'tv',photo:'tp'};
 let nextId=20;
@@ -201,7 +202,7 @@ function render(){
     const items=state.content.filter(c=>c.type===type);
     if(!items.length){el.innerHTML='<p class="empty-state">No content yet.</p>';return;}
     el.innerHTML=items.map(i=>`
-      <div class="content-card ${i.access==='premium'&&!isPremium()?'locked':''}" onclick="${i.type==='video'?'loadVideo('+safeItemJson(i)+')':'toast(\''+escapeJs(i.title)+(i.access==='premium'&&!isPremium()?' — Premium locked':'')+'\')'}">
+      <div class="content-card ${i.access==='premium'&&!isPremium()?'locked':''}" onclick='openContent(${safeItemJson(i)})':'toast(\''+escapeJs(i.title)+(i.access==='premium'&&!isPremium()?' — Premium locked':'')+'\')'}">
         <div class="cthumb ${typeThumb[i.type]}">${typeIcon[i.type]}</div>
         <div class="cinfo"><div class="ctitle">${escapeHtml(i.title)}</div><div class="cmeta">${escapeHtml(i.desc||'')}</div></div>
         <span class="badge ${i.access==='premium'?'bp':'bf'}">${i.access==='premium'?'✦ Premium':'Free'}</span>
