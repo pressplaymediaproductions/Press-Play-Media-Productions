@@ -240,14 +240,75 @@ function render(){
 }
 
 async function addContent(){
-  if(!isAdmin()){toast('Admin only');return;}
-  const t=document.getElementById('u-title').value.trim();
-  if(!t){toast('Enter a title first');return;}
-  const row={title:t,type:document.getElementById('u-type').value,premium:document.getElementById('u-access').value==='premium',file_url:document.getElementById('u-desc').value.trim()};
-  const { error } = await supabaseClient.from('content').insert([row]);
-  if(error){console.error(error); toast('Content not saved. Check policies.'); return;}
-  document.getElementById('u-title').value='';document.getElementById('u-desc').value='';
-  await loadContent(); render(); toast('▶ Content saved to Supabase!');
+  if(!isAdmin()){
+    toast('Admin only');
+    return;
+  }
+
+  const title = document.getElementById('u-title').value.trim();
+  const type = document.getElementById('u-type').value;
+  const access = document.getElementById('u-access').value;
+  const desc = document.getElementById('u-desc').value.trim();
+  const fileInput = document.getElementById('u-file');
+  const file = fileInput?.files?.[0];
+
+  if(!title){
+    toast('Enter a title first');
+    return;
+  }
+
+  let fileUrl = '';
+
+  if(file){
+    const bucket = type === 'music' ? 'music' : type === 'video' ? 'videos' : 'gallery';
+    const filePath = `${Date.now()}-${file.name.replaceAll(' ', '-')}`;
+
+    const { error: uploadError } = await supabaseClient
+      .storage
+      .from(bucket)
+      .upload(filePath, file);
+
+    if(uploadError){
+      console.error(uploadError);
+      toast('File upload failed');
+      return;
+    }
+
+    const { data: publicUrlData } = supabaseClient
+      .storage
+      .from(bucket)
+      .getPublicUrl(filePath);
+
+    fileUrl = publicUrlData.publicUrl;
+  }
+
+  const row = {
+    title: title,
+    type: type,
+    premium: access === 'premium',
+    file_url: fileUrl,
+    description: desc
+  };
+
+  const { error } = await supabaseClient
+    .from('content')
+    .insert([row]);
+
+  if(error){
+    console.error(error);
+    toast('Content not saved. Check policies.');
+    return;
+  }
+
+  document.getElementById('u-title').value = '';
+  document.getElementById('u-desc').value = '';
+  if(fileInput) fileInput.value = '';
+  const fileName = document.getElementById('u-file-name');
+  if(fileName) fileName.textContent = 'Audio, video, or image';
+
+  await loadContent();
+  render();
+  toast('▶ Content saved with file!');
 }
 async function addAnnouncement(){
   if(!isAdmin()){toast('Admin only');return;}
