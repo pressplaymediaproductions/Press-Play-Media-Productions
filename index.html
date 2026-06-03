@@ -178,14 +178,19 @@
         </div>
       </div>
       <div><div class="flabel">Description</div><input class="finput" id="u-desc" placeholder="Short description for fans" /></div>
-      <div class="fdrop" onclick="toast('Connect Supabase Storage to enable real file uploads!')">
-        <div style="font-size:28px">📁</div>
-        <p><strong>Click to upload file</strong></p>
-        <p>Audio, video, or image — connect cloud storage to activate</p>
-      </div>
-      <button class="sbtn" onclick="addContent()">▶ Publish Content</button>
-    </div>
-  </div>
+      <div class="fdrop" onclick="document.getElementById('u-file').click()">
+  <div style="font-size:28px">📁</div>
+  <p><strong>Click to upload file</strong></p>
+  <p id="u-file-name">Audio, video, or image</p>
+</div>
+
+<input
+  id="u-file"
+  type="file"
+  accept="audio/*,video/*,image/*"
+  style="display:none"
+  onchange="document.getElementById('u-file-name').textContent = this.files[0]?.name || 'Audio, video, or image'"
+/>
 
   <!-- ANNOUNCE -->
   <div class="admin-section-page" id="ap-announce-admin">
