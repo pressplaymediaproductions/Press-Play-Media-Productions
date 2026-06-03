@@ -356,5 +356,23 @@ function toast(msg){
 function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\'':'&#39;','"':'&quot;'}[m]));}
 function escapeJs(s){return String(s??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');}
 function safeItemJson(i){return JSON.stringify(i).replace(/"/g,'&quot;');}
+function safeItemJson(i){
+  return JSON.stringify(i).replace(/"/g,'&quot;');
+}
 
+function openContent(item){
+  if(item.access === 'premium' && !isPremium()){
+    toast('Premium content locked');
+    return;
+  }
+
+  if(item.file_url){
+    window.open(item.file_url, '_blank');
+    return;
+  }
+
+  toast(item.title);
+}
+
+initApp();
 initApp();
