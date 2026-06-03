@@ -260,7 +260,7 @@ async function addContent(){
   let fileUrl = '';
 
   if(file){
-    const bucket = type === 'music' ? 'music' : type === 'video' ? 'videos' : 'gallery';
+    const bucket = type === 'music' ? 'Music' : type === 'video' ? 'Videos' : 'Gallery';
     const filePath = `${Date.now()}-${file.name.replaceAll(' ', '-')}`;
 
     const { error: uploadError } = await supabaseClient
