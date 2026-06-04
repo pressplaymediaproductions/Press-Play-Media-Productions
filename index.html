@@ -40,15 +40,24 @@
 
 <!-- ===== FAN PAGE ===== -->
 <div class="page active" id="page-fan">
-  <div class="hero">
+ <div class="hero">
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="https://hibcgbidpiqqvcucsndn.supabase.co/storage/v1/object/public/Videos/1780604334828-Untitled-design-(3).mp4" type="video/mp4">
+  </video>
+
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
     <div class="hero-badge">▶ Press Play Media Productions</div>
     <h1>Exclusive <span>Content</span><br>For Real Fans</h1>
-    <p id="hero-tagline">Music, videos, merch & more — drop before the world hears it.</p>
+    <p id="hero-tagline">Music, videos, merch & behind-the-scenes drops before the world hears it.</p>
+
     <div class="hero-btns">
       <button class="btn-primary" id="join-btn" onclick="toast('Member signup — connect Stripe to go live!')">Join Free</button>
       <button class="btn-secondary" onclick="toast('Premium unlocks all exclusive content!')">Go Premium ✦</button>
     </div>
   </div>
+</div>
 
   <div class="fan-tabs">
     <div class="fan-tab active" onclick="switchFanTab('music',this)">🎵 Music</div>
