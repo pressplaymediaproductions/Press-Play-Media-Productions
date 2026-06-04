@@ -251,6 +251,7 @@ async function addContent(){
   const access = document.getElementById('u-access').value;
   const desc = document.getElementById('u-desc').value.trim();
   const fileInput = document.getElementById('u-file');
+  const externalUrl = document.getElementById('u-url')?.value.trim() || '';
   const file = fileInput?.files?.[0];
 
   if(!title){
@@ -258,7 +259,7 @@ async function addContent(){
     return;
   }
 
-  let fileUrl = '';
+  let fileUrl = externalUrl;
 
   if(file){
     const bucket = type === 'music' ? 'Music' : type === 'video' ? 'Videos' : 'Gallery';
