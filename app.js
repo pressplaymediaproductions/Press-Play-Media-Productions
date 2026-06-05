@@ -116,6 +116,7 @@ function switchFanTab(tab,el){
   document.querySelectorAll('.fan-section').forEach(s=>s.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('fs-'+tab).classList.add('active');
+  document.getElementById('page-fan').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function switchAdminTab(tab,el){
   document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
