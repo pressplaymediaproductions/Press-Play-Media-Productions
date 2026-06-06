@@ -379,3 +379,32 @@ function openContent(item){
 
 initApp();
 initApp();
+function openEmailModal(){
+  document.getElementById('email-modal').classList.remove('hidden');
+}
+
+function closeEmailModal(){
+  document.getElementById('email-modal').classList.add('hidden');
+}
+
+async function saveWaitlistEmail(){
+  const email = document.getElementById('waitlist-email').value.trim();
+
+  if(!email || !email.includes('@')){
+    alert('Please enter a valid email.');
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from('email_subscribers')
+    .insert([{ email }]);
+
+  if(error){
+    console.error(error);
+    alert('Email not saved.');
+    return;
+  }
+
+  alert('You are on the premium waitlist!');
+  closeEmailModal();
+}
