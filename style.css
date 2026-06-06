@@ -207,3 +207,44 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   position:relative;
   z-index:2;
 }
+.email-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.email-modal-box{
+  width:90%;
+  max-width:420px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:24px;
+}
+
+.email-modal-box h2{
+  margin-bottom:10px;
+}
+
+.email-modal-box p{
+  margin-bottom:15px;
+  color:var(--muted);
+}
+
+.email-modal-box input{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+}
+
+.hidden{
+  display:none !important;
+}
