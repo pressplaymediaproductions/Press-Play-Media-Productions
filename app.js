@@ -378,7 +378,7 @@ function openContent(item){
 }
 
 initApp();
-initApp();
+
 function openEmailModal(){
   document.getElementById('email-modal').classList.remove('hidden');
 }
