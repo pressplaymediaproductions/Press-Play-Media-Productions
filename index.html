@@ -336,7 +336,17 @@
 </div>
 
 <div class="toast" id="toastEl"></div>
+<div id="email-modal" class="email-modal hidden">
+  <div class="email-modal-box">
+    <h2>Join the Premium Waitlist</h2>
+    <p>Get updates on exclusive drops, premium content, merch, and early access.</p>
 
+    <input type="email" id="waitlist-email" placeholder="Enter your email" />
+
+    <button onclick="saveWaitlistEmail()">Join Waitlist</button>
+    <button onclick="closeEmailModal()">Close</button>
+  </div>
+</div>
 
 <script src="config.js"></script>
 <script src="app.js"></script>
