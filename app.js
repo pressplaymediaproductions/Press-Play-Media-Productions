@@ -400,9 +400,10 @@ async function saveWaitlistEmail(){
     .insert([{ email }]);
 
   if(error){
-    console.error(error);
-    alert('Email not saved.');
-    return;
+  console.error(error);
+  alert(JSON.stringify(error));
+  return;
+}
   }
 
   alert('You are on the premium waitlist!');
