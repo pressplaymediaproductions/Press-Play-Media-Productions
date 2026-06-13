@@ -65,7 +65,13 @@ async function signInEmail(){
   const password=document.getElementById('auth-password').value.trim();
   if(!email||!password){toast('Enter email and password');return;}
   const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-  if(error){toast(error.message);return;}
+  if(error){
+  alert(error.message);
+  console.error(error);
+  return;
+}
+
+alert("LOGIN SUCCESS");
 }
 async function signInGoogle(){
   const { error } = await supabaseClient.auth.signInWithOAuth({ provider:'google' });
