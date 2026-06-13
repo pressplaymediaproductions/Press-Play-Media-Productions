@@ -57,7 +57,7 @@ async function signUpEmail(){
   const password=document.getElementById('auth-password').value.trim();
   if(!email||!password){toast('Enter email and password');return;}
   const { error } = await supabaseClient.auth.signUp({ email, password });
-  if(error){toast(error.message);return;}
+  if(error){alert(error.message);return;}
   toast('Account created. Check email if confirmation is required.');
 }
 async function signInEmail(){
