@@ -404,8 +404,8 @@ async function saveWaitlistEmail(){
   alert(JSON.stringify(error));
   return;
 }
-  }
 
+  
   alert('You are on the premium waitlist!');
   closeEmailModal();
 }
