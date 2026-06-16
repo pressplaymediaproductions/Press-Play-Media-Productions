@@ -277,9 +277,11 @@ async function addContent(){
       .from(bucket)
       .upload(filePath, file);
 
-    if(uploadError){
-      console.error(uploadError);
-      toast('File upload failed');
+  if(uploadError){
+    console.error(uploadError);
+    alert(JSON.stringify(uploadError));
+    return;
+}
       return;
     }
 
