@@ -287,7 +287,7 @@ async function addContent(){
     alert(JSON.stringify(uploadError));
     return;
 }
-      return;
+    
     }
 
     const { data: publicUrlData } = supabaseClient
