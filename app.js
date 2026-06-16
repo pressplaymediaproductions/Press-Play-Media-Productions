@@ -272,7 +272,7 @@ const thumbFile = document.getElementById('u-thumb')?.files?.[0];
   }
 
   let fileUrl = externalUrl;
-
+let thumbnailUrl = '';
   if(file){
     const bucket = type === 'music' ? 'Music' : type === 'video' ? 'Videos' : 'Gallery';
     const filePath = `${Date.now()}-${file.name.replaceAll(' ', '-')}`;
