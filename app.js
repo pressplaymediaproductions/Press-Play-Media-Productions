@@ -297,7 +297,27 @@ let thumbnailUrl = '';
 
     fileUrl = publicUrlData.publicUrl;
   }
+if(thumbFile){
+  const thumbPath = `${Date.now()}-thumb-${thumbFile.name.replaceAll(' ', '-')}`;
 
+  const { error: thumbError } = await supabaseClient
+    .storage
+    .from('Gallery')
+    .upload(thumbPath, thumbFile);
+
+  if(thumbError){
+    console.error(thumbError);
+    alert(JSON.stringify(thumbError));
+    return;
+  }
+
+  const { data: thumbUrlData } = supabaseClient
+    .storage
+    .from('Gallery')
+    .getPublicUrl(thumbPath);
+
+  thumbnailUrl = thumbUrlData.publicUrl;
+}
   const row = {
     title: title,
     type: type,
