@@ -298,7 +298,14 @@ let thumbnailUrl = '';
     fileUrl = publicUrlData.publicUrl;
   }
 if(thumbFile){
-  const thumbPath = `${Date.now()}-thumb-${thumbFile.name.replaceAll(' ', '-')}`;
+  const row = {
+  title: title,
+  type: type,
+  premium: access === 'premium',
+  file_url: fileUrl,
+  description: desc,
+  thumbnail_url: thumbnailUrl
+};
 
   const { error: thumbError } = await supabaseClient
     .storage
