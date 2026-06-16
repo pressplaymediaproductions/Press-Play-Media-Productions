@@ -288,7 +288,7 @@ async function addContent(){
     return;
 }
     
-    }
+    
 
     const { data: publicUrlData } = supabaseClient
       .storage
