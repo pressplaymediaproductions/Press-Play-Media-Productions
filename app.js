@@ -79,6 +79,11 @@ async function signInGoogle(){
 }
 async function signOut(){ await supabaseClient.auth.signOut(); }
 
+window.signUpEmail = signUpEmail;
+window.signInEmail = signInEmail;
+window.signInGoogle = signInGoogle;
+
+
 async function loadAllData(){
   await Promise.all([loadContent(), loadMerch(), loadAnnouncements(), loadComments()]);
   render();
