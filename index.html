@@ -226,6 +226,11 @@
   accept="audio/*,video/*,image/*"
   style="display:none"
   onchange="document.getElementById('u-file-name').textContent = this.files[0]?.name || 'Audio, video, or image'"
+<div>
+  <div class="flabel">Thumbnail Image</div>
+  <input class="finput" id="u-thumb" type="file" accept="image/*" />
+</div>
+  
 /><button class="sbtn" onclick="addContent()">▶ Publish Content</button>
 
   <!-- ANNOUNCE -->
