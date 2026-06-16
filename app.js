@@ -265,7 +265,7 @@ async function addContent(){
   const fileInput = document.getElementById('u-file');
   const externalUrl = document.getElementById('u-url')?.value.trim() || '';
   const file = fileInput?.files?.[0];
-
+const thumbFile = document.getElementById('u-thumb')?.files?.[0];
   if(!title){
     toast('Enter a title first');
     return;
