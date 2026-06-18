@@ -472,3 +472,12 @@ async function saveWaitlistEmail(){
   alert('You are on the premium waitlist!');
   closeEmailModal();
 }
+window.switchView = switchView;
+window.signUpEmail = signUpEmail;
+window.signInEmail = signInEmail;
+window.signInGoogle = signInGoogle;
+window.signOut = signOut;
+window.addContent = addContent;
+window.openEmailModal = openEmailModal;
+window.closeEmailModal = closeEmailModal;
+window.saveWaitlistEmail = saveWaitlistEmail;
