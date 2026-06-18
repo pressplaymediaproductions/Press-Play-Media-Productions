@@ -363,10 +363,8 @@ async function addContent(){
   toast('▶ Content saved successfully!');
 }
 
-  if(fileInput) fileInput.value = '';
 
-  const fileName = document.getElementById('u-file-name');
-  if(fileName) fileName.textContent = 'Audio, video, or image';
+
 
 
 async function addAnnouncement(){
