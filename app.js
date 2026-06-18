@@ -368,14 +368,7 @@ async function addContent(){
   const fileName = document.getElementById('u-file-name');
   if(fileName) fileName.textContent = 'Audio, video, or image';
 
-  const thumbInput = document.getElementById('u-thumb');
-  if(thumbInput) thumbInput.value = '';
 
-  await loadContent();
-  render();
-
-  toast('▶ Content saved successfully!');
-}
 async function addAnnouncement(){
   if(!isAdmin()){toast('Admin only');return;}
   const t=document.getElementById('an-title').value.trim();
