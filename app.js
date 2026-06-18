@@ -262,33 +262,42 @@ async function addContent(){
   const type = document.getElementById('u-type').value;
   const access = document.getElementById('u-access').value;
   const desc = document.getElementById('u-desc').value.trim();
+
   const fileInput = document.getElementById('u-file');
   const externalUrl = document.getElementById('u-url')?.value.trim() || '';
+
   const file = fileInput?.files?.[0];
-const thumbFile = document.getElementById('u-thumb')?.files?.[0];
+  const thumbFile = document.getElementById('u-thumb')?.files?.[0];
+
   if(!title){
     toast('Enter a title first');
     return;
   }
 
   let fileUrl = externalUrl;
-let thumbnailUrl = '';
+  let thumbnailUrl = '';
+
+  // Upload main file
   if(file){
-    const bucket = type === 'music' ? 'Music' : type === 'video' ? 'Videos' : 'Gallery';
-    const filePath = `${Date.now()}-${file.name.replaceAll(' ', '-')}`;
+    const bucket =
+      type === 'music'
+        ? 'Music'
+        : type === 'video'
+        ? 'Videos'
+        : 'Gallery';
+
+    const filePath = `${Date.now()}-${file.name.replaceAll(' ','-')}`;
 
     const { error: uploadError } = await supabaseClient
       .storage
       .from(bucket)
       .upload(filePath, file);
 
-  if(uploadError){
-    console.error(uploadError);
-    alert(JSON.stringify(uploadError));
-    return;
-}
-    
-    
+    if(uploadError){
+      console.error(uploadError);
+      alert(JSON.stringify(uploadError));
+      return;
+    }
 
     const { data: publicUrlData } = supabaseClient
       .storage
@@ -297,47 +306,41 @@ let thumbnailUrl = '';
 
     fileUrl = publicUrlData.publicUrl;
   }
-if(thumbFile){
-  const row = {
-  title: title,
-  type: type,
-  premium: access === 'premium',
-  file_url: fileUrl,
-  description: desc,
-  thumbnail_url: thumbnailUrl
-};
 
-  const { error: thumbError } = await supabaseClient
-    .storage
-    .from('Gallery')
-    .upload(thumbPath, thumbFile);
+  // Upload thumbnail
+  if(thumbFile){
+    const thumbPath = `${Date.now()}-thumb-${thumbFile.name.replaceAll(' ','-')}`;
 
-  if(thumbError){
-    console.error(thumbError);
-    alert(JSON.stringify(thumbError));
-    return;
+    const { error: thumbError } = await supabaseClient
+      .storage
+      .from('Gallery')
+      .upload(thumbPath, thumbFile);
+
+    if(thumbError){
+      console.error(thumbError);
+      alert(JSON.stringify(thumbError));
+      return;
+    }
+
+    const { data: thumbUrlData } = supabaseClient
+      .storage
+      .from('Gallery')
+      .getPublicUrl(thumbPath);
+
+    thumbnailUrl = thumbUrlData.publicUrl;
   }
 
-  const { data: thumbUrlData } = supabaseClient
-    .storage
-    .from('Gallery')
-    .getPublicUrl(thumbPath);
-
-  thumbnailUrl = thumbUrlData.publicUrl;
-}
   const row = {
     title: title,
     type: type,
     premium: access === 'premium',
     file_url: fileUrl,
-    description: desc
+    description: desc,
+    thumbnail_url: thumbnailUrl
   };
 
   const { error } = await supabaseClient
-    .from('content')
-    .insert([row]);
-
-  if(error){
+    if(error){
     console.error(error);
     toast('Content not saved. Check policies.');
     return;
@@ -345,13 +348,33 @@ if(thumbFile){
 
   document.getElementById('u-title').value = '';
   document.getElementById('u-desc').value = '';
+
   if(fileInput) fileInput.value = '';
+
   const fileName = document.getElementById('u-file-name');
   if(fileName) fileName.textContent = 'Audio, video, or image';
 
+  const thumbInput = document.getElementById('u-thumb');
+  if(thumbInput) thumbInput.value = '';
+
   await loadContent();
   render();
-  toast('▶ Content saved with file!');
+
+  toast('▶ Content saved successfully!');
+}
+
+  if(fileInput) fileInput.value = '';
+
+  const fileName = document.getElementById('u-file-name');
+  if(fileName) fileName.textContent = 'Audio, video, or image';
+
+  const thumbInput = document.getElementById('u-thumb');
+  if(thumbInput) thumbInput.value = '';
+
+  await loadContent();
+  render();
+
+  toast('▶ Content saved successfully!');
 }
 async function addAnnouncement(){
   if(!isAdmin()){toast('Admin only');return;}
