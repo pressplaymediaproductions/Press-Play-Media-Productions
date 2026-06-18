@@ -339,11 +339,15 @@ async function addContent(){
     thumbnail_url: thumbnailUrl
   };
 
-  const { error } = await supabaseClient
-    if(error){
-    console.error(error);
-    toast('Content not saved. Check policies.');
-    return;
+ const { error } = await supabaseClient
+  .from('content')
+  .insert([row]);
+
+if(error){
+  console.error(error);
+  toast('Content not saved. Check policies.');
+  return;
+}
   }
 
   document.getElementById('u-title').value = '';
