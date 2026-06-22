@@ -379,3 +379,23 @@ body{
 
 
 
+/* SECTION SPACING */
+section{
+  margin-bottom:70px;
+}
+
+.fan-section{
+  margin-bottom:60px;
+}
+
+.admin-section{
+  margin-bottom:60px;
+}
+
+.fan-tabs{
+  margin-bottom:30px;
+}
+
+.content-grid{
+  margin-bottom:40px;
+}
