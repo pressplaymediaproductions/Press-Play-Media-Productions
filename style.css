@@ -399,3 +399,10 @@ section{
 .content-grid{
   margin-bottom:40px;
 }
+.fan-section{
+    display:none;
+}
+
+.fan-section.active{
+    display:block;
+}
