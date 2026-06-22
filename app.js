@@ -348,7 +348,7 @@ if(error){
   toast('Content not saved. Check policies.');
   return;
 }
-  }
+  
 
   document.getElementById('u-title').value = '';
   document.getElementById('u-desc').value = '';
