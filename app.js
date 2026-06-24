@@ -140,38 +140,57 @@ function switchAdminTab(tab,el){
 function loadVideo(item){
   if(item.access==='premium'&&!isPremium()){toast('Premium content locked');return;}
   currentVideo=item;
-  document.getElementById('now-playing-title').textContent=item.title;
-  document.getElementById('video-info-title').textContent=item.title;
-  document.getElementById('video-info-desc').textContent=item.desc||'';
-  videoProgress=0;
-  document.getElementById('progress-fill').style.width='0%';
-  document.getElementById('vc-time').textContent='0:00';
-  if(videoPlaying){clearInterval(videoTimer);}
-  videoPlaying=false;
-  document.getElementById('vc-play').textContent='▶';
-  document.getElementById('play-btn').textContent='▶';
-  toast('▶ Loaded: '+item.title);
+  
+function getYouTubeEmbedUrl(url){
+  if(!url) return '';
+  let id = '';
+
+  if(url.includes('youtu.be/')){
+    id = url.split('youtu.be/')[1].split('?')[0];
+  } else if(url.includes('youtube.com/watch')){
+    id = new URL(url).searchParams.get('v');
+  } else if(url.includes('youtube.com/embed/')){
+    return url;
+  }
+
+  return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : '';
 }
+
+function loadVideo(item){
+  if(item.access === 'premium' && !isPremium()){
+    toast('Premium content locked');
+    return;
+  }
+
+  currentVideo = item;
+
+  document.getElementById('now-playing-title').textContent = item.title;
+  document.getElementById('video-info-title').textContent = item.title;
+  document.getElementById('video-info-desc').textContent = item.desc || '';
+
+  const screen = document.getElementById('cinema-screen');
+  const url = item.file_url || '';
+  const ytEmbed = getYouTubeEmbedUrl(url);
+
+  if(ytEmbed){
+    screen.innerHTML = `<iframe width="100%" height="100%" src="${ytEmbed}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  } else if(url.includes('.mp4')){
+    screen.innerHTML = `<video controls autoplay style="width:100%;height:100%;object-fit:cover;"><source src="${url}" type="video/mp4"></video>`;
+  } else {
+    window.open(url, '_blank');
+  }
+
+  toast('▶ Loaded: ' + item.title);
+}
+
 function togglePlay(){
-  if(!currentVideo){toast('Select a video from the list below');return;}
-  videoPlaying=!videoPlaying;
-  document.getElementById('vc-play').textContent=videoPlaying?'⏸':'▶';
-  document.getElementById('play-btn').textContent=videoPlaying?'⏸':'▶';
-  if(videoPlaying){
-    videoTimer=setInterval(()=>{
-      videoProgress=Math.min(videoProgress+0.4,100);
-      document.getElementById('progress-fill').style.width=videoProgress+'%';
-      const secs=Math.round(videoProgress*1.8);
-      document.getElementById('vc-time').textContent=Math.floor(secs/60)+':'+(secs%60).toString().padStart(2,'0');
-      if(videoProgress>=100){clearInterval(videoTimer);videoPlaying=false;document.getElementById('vc-play').textContent='▶';document.getElementById('play-btn').textContent='▶';}
-    },300);
-  }else{clearInterval(videoTimer);}
+  if(!currentVideo){
+    toast('Select a video from the list below');
+  }
 }
+
 function seekVideo(e){
-  const bar=e.currentTarget;
-  const ratio=e.offsetX/bar.offsetWidth;
-  videoProgress=ratio*100;
-  document.getElementById('progress-fill').style.width=videoProgress+'%';
+  return;
 }
 
 async function addComment(section){
