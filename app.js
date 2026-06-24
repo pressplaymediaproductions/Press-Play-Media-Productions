@@ -139,14 +139,6 @@ function switchAdminTab(tab,el){
 
 
 function getYouTubeEmbedUrl(url){
-  if(!url) return '';
-
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&?/]+)/);
-
-  return match && match[1]
-    ? `https://www.youtube.com/embed/${match[1]}?autoplay=1`
-    : '';
-}
 function loadVideo(item){
   if(item.access === 'premium' && !isPremium()){
     toast('Premium content locked');
@@ -163,27 +155,30 @@ function loadVideo(item){
   const url = item.file_url || '';
   const ytEmbed = getYouTubeEmbedUrl(url);
 
-  if(ytEmbed){
-    screen.innerHTML = `<iframe width="100%" height="100%" src="${ytEmbed}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-  } else if(url.includes('.mp4')){
-    screen.innerHTML = `<video controls autoplay style="width:100%;height:100%;object-fit:cover;"><source src="${url}" type="video/mp4"></video>`;
-  } else {
-    window.open(url, '_blank');
- screen.innerHTML = '';
+  screen.innerHTML = '';
 
-setTimeout(() => {
-  if(ytEmbed){
-    screen.innerHTML = `<iframe width="100%" height="100%" src="${ytEmbed}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-  } else if(url.includes('.mp4')){
-    screen.innerHTML = `<video controls autoplay style="width:100%;height:100%;object-fit:cover;"><source src="${url}" type="video/mp4"></video>`;
-  } else {
-    screen.innerHTML = `<div class="cinema-placeholder"><div class="cinema-play">▶</div><div>Video link could not be embedded</div></div>`;
-  }
-}, 50);
+  setTimeout(() => {
+    if(ytEmbed){
+      screen.innerHTML = `<iframe width="100%" height="100%" src="${ytEmbed}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    } else if(url.includes('.mp4')){
+      screen.innerHTML = `<video controls autoplay style="width:100%;height:100%;object-fit:cover;"><source src="${url}" type="video/mp4"></video>`;
+    } else {
+      screen.innerHTML = `<div class="cinema-placeholder"><div class="cinema-play">▶</div><div>Video link could not be embedded</div></div>`;
+    }
+  }, 50);
+
+  toast('▶ Loaded: ' + item.title);
+}
+
+function togglePlay(){
+  if(!currentVideo){
     toast('Select a video from the list below');
   }
 }
 
+function seekVideo(e){
+  return;
+}
 
 async function addComment(section){
   const text=document.getElementById(section+'-comment-text').value.trim();
