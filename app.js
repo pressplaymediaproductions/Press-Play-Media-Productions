@@ -216,7 +216,7 @@ function render(){
     const items=state.content.filter(c=>c.type===type);
     if(!items.length){el.innerHTML='<p class="empty-state">No content yet.</p>';return;}
     el.innerHTML=items.map(i=>`
-     <div class="content-card ${i.access==='premium'&&!isPremium()?'locked':''}" onclick='${type==="video" ? `loadVideo(${safeItemJson(i)})` : `openContent(${safeItemJson(i)})`}'>
+    <div class="content-card ${i.access==='premium'&&!isPremium()?'locked':''}" onclick='loadVideo(${safeItemJson(i)})'>
         <div class="cthumb ${typeThumb[i.type]}">${typeIcon[i.type]}</div>
         <div class="cinfo"><div class="ctitle">${escapeHtml(i.title)}</div><div class="cmeta">${escapeHtml(i.desc||'')}</div></div>
         <span class="badge ${i.access==='premium'?'bp':'bf'}">${i.access==='premium'?'✦ Premium':'Free'}</span>
