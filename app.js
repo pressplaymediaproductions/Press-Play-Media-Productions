@@ -169,13 +169,17 @@ function loadVideo(item){
     screen.innerHTML = `<video controls autoplay style="width:100%;height:100%;object-fit:cover;"><source src="${url}" type="video/mp4"></video>`;
   } else {
     window.open(url, '_blank');
+ screen.innerHTML = '';
+
+setTimeout(() => {
+  if(ytEmbed){
+    screen.innerHTML = `<iframe width="100%" height="100%" src="${ytEmbed}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  } else if(url.includes('.mp4')){
+    screen.innerHTML = `<video controls autoplay style="width:100%;height:100%;object-fit:cover;"><source src="${url}" type="video/mp4"></video>`;
+  } else {
+    screen.innerHTML = `<div class="cinema-placeholder"><div class="cinema-play">▶</div><div>Video link could not be embedded</div></div>`;
   }
-
-  toast('▶ Loaded: ' + item.title);
-}
-
-function togglePlay(){
-  if(!currentVideo){
+}, 50);
     toast('Select a video from the list below');
   }
 }
