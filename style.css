@@ -458,3 +458,12 @@ section{
 .cinema-info p{
     opacity:.75;
 }
+.content-card{
+  position:relative;
+  z-index:5;
+}
+
+.cinema-player{
+  position:relative;
+  z-index:1;
+}
