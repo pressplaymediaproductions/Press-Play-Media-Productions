@@ -138,7 +138,15 @@ function switchAdminTab(tab,el){
 }
 
 
+function getYouTubeEmbedUrl(url){
+  if(!url) return '';
 
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&?/]+)/);
+
+  return match && match[1]
+    ? `https://www.youtube.com/embed/${match[1]}?autoplay=1`
+    : '';
+}
 function loadVideo(item){
   if(item.access === 'premium' && !isPremium()){
     toast('Premium content locked');
@@ -172,9 +180,6 @@ function togglePlay(){
   }
 }
 
-function seekVideo(e){
-  return;
-screen.innerHTML = `<div class="cinema-placeholder"><div class="cinema-play">▶</div><div>Video link could not be embedded</div></div>`;
 
 async function addComment(section){
   const text=document.getElementById(section+'-comment-text').value.trim();
