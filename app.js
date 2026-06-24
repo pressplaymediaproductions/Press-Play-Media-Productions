@@ -137,11 +137,6 @@ function switchAdminTab(tab,el){
   render();
 }
 
-function loadVideo(item){
-  if(item.access==='premium'&&!isPremium()){toast('Premium content locked');return;}
-  currentVideo=item;
-  
-function getYouTubeEmbedUrl(url){
   if(!url) return '';
   let id = '';
 
