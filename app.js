@@ -184,7 +184,7 @@ function togglePlay(){
 function seekVideo(e){
   return;
 }
-}
+
 async function likeComment(section,id){
   const c=state.comments[section].find(c=>c.id===id);
   if(!c) return;
