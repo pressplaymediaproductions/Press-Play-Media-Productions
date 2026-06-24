@@ -85,26 +85,21 @@
   </div>
 
   <div class="fan-section" id="fs-video">
-    <div class="sec-label">Now Playing</div>
-    <div class="video-player" id="video-player">
-      <div class="video-screen" onclick="togglePlay()">
-        <div class="video-screen-inner">
-          <div class="play-btn-big" id="play-btn">▶</div>
-          <div class="video-title-overlay" id="now-playing-title">Select a video below to play</div>
-        </div>
-      </div>
-      <div class="video-controls">
-        <button class="vc-btn" onclick="togglePlay()" id="vc-play">▶</button>
-        <div class="progress-bar" onclick="seekVideo(event)">
-          <div class="progress-fill" id="progress-fill"></div>
-        </div>
-        <div class="vc-time" id="vc-time">0:00</div>
-      </div>
-      <div class="video-info">
-        <h3 id="video-info-title">No video selected</h3>
-        <p id="video-info-desc">Click a video below to load it</p>
-      </div>
+    <div class="sec-label">Featured Video</div>
+
+<div class="cinema-player" id="video-player">
+  <div class="cinema-screen" id="cinema-screen">
+    <div class="cinema-placeholder">
+      <div class="cinema-play">▶</div>
+      <div id="now-playing-title">Select a video below to play</div>
     </div>
+  </div>
+
+  <div class="cinema-info">
+    <h3 id="video-info-title">No video selected</h3>
+    <p id="video-info-desc">Click a video below to load it</p>
+  </div>
+</div>
     <div class="sec-label">All Videos</div>
     <div class="content-list" id="list-video"></div>
     <div class="comments-section">
