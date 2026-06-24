@@ -406,3 +406,55 @@ section{
 .fan-section.active{
     display:block;
 }
+/* ===== Featured Cinema Player ===== */
+
+.cinema-player{
+    background:#0b1018;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    overflow:hidden;
+    margin-bottom:24px;
+}
+
+.cinema-screen{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.cinema-placeholder{
+    text-align:center;
+    color:#fff;
+}
+
+.cinema-play{
+    width:90px;
+    height:90px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    background:#d8ff47;
+    color:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:38px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.cinema-info{
+    padding:24px;
+}
+
+.cinema-info h3{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.cinema-info p{
+    opacity:.75;
+}
