@@ -139,6 +139,11 @@ function switchAdminTab(tab,el){
 
 
 function getYouTubeEmbedUrl(url){
+  if(!url) return '';
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&?/]+)/);
+  return match && match[1] ? `https://www.youtube.com/embed/${match[1]}?autoplay=1` : '';
+}
+
 function loadVideo(item){
   if(item.access === 'premium' && !isPremium()){
     toast('Premium content locked');
@@ -179,15 +184,6 @@ function togglePlay(){
 function seekVideo(e){
   return;
 }
-
-async function addComment(section){
-  const text=document.getElementById(section+'-comment-text').value.trim();
-  const name=document.getElementById(section+'-comment-name').value.trim()||'Fan';
-  if(!text){toast('Write something first!');return;}
-  const { error } = await supabaseClient.from('comments').insert([{username:name,comment:text,likes:0,section}]);
-  if(error){console.error(error); toast('Comment not saved. Check comments table policy/columns.'); return;}
-  document.getElementById(section+'-comment-text').value='';
-  await loadComments(); renderComments(section); toast('Comment posted! ▶');
 }
 async function likeComment(section,id){
   const c=state.comments[section].find(c=>c.id===id);
