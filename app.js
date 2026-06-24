@@ -137,19 +137,7 @@ function switchAdminTab(tab,el){
   render();
 }
 
-  if(!url) return '';
-  let id = '';
 
-  if(url.includes('youtu.be/')){
-    id = url.split('youtu.be/')[1].split('?')[0];
-  } else if(url.includes('youtube.com/watch')){
-    id = new URL(url).searchParams.get('v');
-  } else if(url.includes('youtube.com/embed/')){
-    return url;
-  }
-
-  return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : '';
-}
 
 function loadVideo(item){
   if(item.access === 'premium' && !isPremium()){
@@ -162,7 +150,21 @@ function loadVideo(item){
   document.getElementById('now-playing-title').textContent = item.title;
   document.getElementById('video-info-title').textContent = item.title;
   document.getElementById('video-info-desc').textContent = item.desc || '';
+function getYouTubeEmbedUrl(url){
+  if(!url) return '';
 
+  let id = '';
+
+  if(url.includes('youtu.be/')){
+    id = url.split('youtu.be/')[1].split('?')[0];
+  } else if(url.includes('youtube.com/watch')){
+    id = new URL(url).searchParams.get('v');
+  } else if(url.includes('youtube.com/embed/')){
+    return url;
+  }
+
+  return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : '';
+}
   const screen = document.getElementById('cinema-screen');
   const url = item.file_url || '';
   const ytEmbed = getYouTubeEmbedUrl(url);
