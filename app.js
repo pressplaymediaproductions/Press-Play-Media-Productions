@@ -91,7 +91,15 @@ async function loadAllData(){
 async function loadContent(){
   const { data, error } = await supabaseClient.from('content').select('*').order('created_at',{ascending:false});
   if(error){console.error(error); toast('Could not load content'); return;}
-  state.content=(data||[]).map(row=>({id:row.id,title:row.title,type:row.type,access:row.premium?'premium':'free',desc:row.description||'',file_url:row.file_url,thumbnail_url:row.thumbnail_url}));
+state.content = (data || []).map(row => ({
+  id: row.id,
+  title: row.title,
+  type: row.type,
+  access: row.premium ? 'premium' : 'free',
+  desc: row.description || '',
+  file_url: row.file_url || '',
+  thumbnail_url: row.thumbnail_url || ''
+}));
 }
 async function loadMerch(){
   const { data, error } = await supabaseClient.from('merch').select('*').order('created_at',{ascending:false});
