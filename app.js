@@ -229,6 +229,21 @@ function render(){
 };
   });
 }
+    const switcher = document.getElementById('video-switcher');
+if(type === 'video' && switcher){
+  switcher.innerHTML = items.map(i=>`
+    <button class="video-switch-btn" data-id="${i.id}">
+      ${escapeHtml(i.title)}
+    </button>
+  `).join('');
+
+  switcher.querySelectorAll('.video-switch-btn').forEach(btn=>{
+    btn.onclick = () => {
+      const item = state.content.find(v => v.id == btn.dataset.id);
+      if(item) loadVideo(item);
+    };
+  });
+}
     renderComments(type);
   });
   const mg=document.getElementById('list-merch');
